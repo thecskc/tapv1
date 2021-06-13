@@ -2,6 +2,7 @@ import firebase from "firebase";
 import {useState} from "react";
 import {useEffect} from "react";
 import SignIn from "../components/SignIn";
+import ListConnections from "../components/ListConnections";
 
 const db = firebase.firestore();
 
@@ -25,7 +26,7 @@ function Home() {
     if (user) {
         return (
             <div>
-                You are signed in
+                <ListConnections user={user}/>
             </div>);
     }
     else{
