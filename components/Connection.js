@@ -54,6 +54,8 @@ function Connection(props) {
         }).then(() => {
             console.log("Update success!");
         });
+
+        window.location.href = profile.room_url; // redirect to tapee's room
     }
 
     if(loading){
