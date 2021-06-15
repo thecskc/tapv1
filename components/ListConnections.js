@@ -10,20 +10,27 @@ const db = firebase.firestore();
 
 function ListConnections(props) {
 
-    const [connections, setConnections] = useState([]);
+    const [connections, setConnections] = useState([])
+
+
 
     useEffect(() => {
 
-        db.collection("connections").where("personOne", "==", props.user.uid).get().then(
+        let fetchVal = db.collection("connections").where("personOne", "==", props.user.uid).onSnapshot(
             (queryResult) => {
                 let arrRes = [];
                 queryResult.forEach((val) => {
                     console.log(val.data());
-                    arrRes.push(<Connection uid={val.data().personTwo} key={val.data().personTwo}/>);
+                    arrRes.push(<Connection uid={val.data().personTwo} personTwoData={val.data().personTwoData} key={val.data().personTwo}/>);
                 })
                 console.log(arrRes);
                 setConnections(arrRes);
-            })
+            });
+
+        return function unsub(){
+            fetchVal();
+        }
+
 
     }, []);
 

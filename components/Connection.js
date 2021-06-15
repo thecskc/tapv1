@@ -7,26 +7,35 @@ import {useState} from "react";
 const db = firebase.firestore();
 
 
-function Connection(props){
+function Connection(props) {
 
-    const [profile,setProfile] = useState({});
+    const [loading,setLoading] = useState(true);
+    const [profile, setProfile] = useState({});
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        db.collection("users").doc(props.uid).get().then((result)=>{
+        db.collection("users").doc(props.uid).get().then((result) => {
             console.log(result.data());
+            setLoading(false);
             setProfile(result.data());
         })
 
 
+    }, [])
 
+    const clickTap = function(event){
+        event.preventDefault();
+    }
 
-    },[])
-
-    return(
+    if(loading){
+        return <div/>
+    }
+    return (
         <div>
-        <div>{profile.email}</div>
-        <a href={"https://www.tomo.chat/tapone"}>Tap</a>
+            <div>{profile.email}</div>
+            <div>{props.personTwoData}</div>
+            <button onClick={clickTap}>Tap</button>
+
         </div>
     )
 
