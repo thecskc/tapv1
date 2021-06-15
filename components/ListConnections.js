@@ -21,7 +21,7 @@ function ListConnections(props) {
                 let arrRes = [];
                 queryResult.forEach((val) => {
                     console.log(val.data());
-                    arrRes.push(<Connection uid={val.data().personTwo} personTwoData={val.data().personTwoData} key={val.data().personTwo}/>);
+                    arrRes.push(<Connection personOneUid = {props.user.uid} personTwoUid={val.data().personTwo} state={val.data().state} key={val.data().personTwo}/>);
                 })
                 console.log(arrRes);
                 setConnections(arrRes);
@@ -36,9 +36,12 @@ function ListConnections(props) {
 
     return (
         <div>
-            {
+            { 
                 connections.map((val) => {
-                    return(val);
+                    return(
+                      <div>{val}</div>
+
+                    );
                 })
             }
         </div>

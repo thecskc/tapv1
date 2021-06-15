@@ -13,18 +13,29 @@ function Connection(props) {
     const [profile, setProfile] = useState({});
 
     useEffect(() => {
-
-        db.collection("users").doc(props.uid).get().then((result) => {
+        db.collection("users").doc(props.personTwoUid).get().then((result) => {
             console.log(result.data());
             setLoading(false);
             setProfile(result.data());
         })
-
-
     }, [])
 
     const clickTap = function(event){
-        event.preventDefault();
+        db.collection("connections").doc(props.personTwoUid + props.personOneUid).set({
+            "state": "RECEIVE_REQUEST"
+        }, {
+            merge: true
+        }).then(() => {
+            console.log("Update success!");
+        });
+
+        db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
+            "state": "SEND_REQUEST"
+        }, {
+            merge: true
+        }).then(() => {
+            console.log("Update success!");
+        });
     }
 
     if(loading){
