@@ -10,6 +10,8 @@ function Home() {
 
     const [user, setUser] = useState("");
 
+
+
     async function getUser() {
         firebase.auth().onAuthStateChanged((user) => {
             if (user) {
@@ -26,6 +28,7 @@ function Home() {
     if (user) {
         return (
             <div>
+                
                 <ListConnections user={user}/>
             </div>);
     }

@@ -2,6 +2,7 @@ import React from "react";
 import firebase from "firebase";
 import {useEffect} from "react";
 import {useState} from "react";
+import styles from "./Connection.module.css"
 
 
 const db = firebase.firestore();
@@ -10,24 +11,26 @@ const db = firebase.firestore();
 function Connection(props) {
 
     const [loading,setLoading] = useState(true);
-    const [profile, setProfile] = useState({});
+    const [personTwoProfile, setPersonTwoProfile] = useState({});
+    const [personOneProfile,setPersonOneProfile] = useState({});
+
+
 
     useEffect(() => {
         db.collection("users").doc(props.personTwoUid).get().then((result) => {
             console.log(result.data());
-            setLoading(false);
-            setProfile(result.data());
+            setPersonTwoProfile(result.data());
+
+            db.collection("users").doc(props.personOneUid).get().then((result)=>{
+                setPersonOneProfile(result.data());
+                setLoading(false);
+
+            })
+
         })
     }, [])
 
     const clickTap = function(event){
-        db.collection("connections").doc(props.personTwoUid + props.personOneUid).set({
-            "state": "RECEIVE_REQUEST"
-        }, {
-            merge: true
-        }).then(() => {
-            console.log("Update success!");
-        });
 
         db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
             "state": "SEND_REQUEST"
@@ -36,17 +39,20 @@ function Connection(props) {
         }).then(() => {
             console.log("Update success!");
         });
-    }
 
-    const updateDefaultState = function(event){
+
         db.collection("connections").doc(props.personTwoUid + props.personOneUid).set({
-            "state": "DEFAULT"
+            "state": "RECEIVE_REQUEST"
         }, {
             merge: true
         }).then(() => {
             console.log("Update success!");
         });
 
+
+    }
+
+    const setDefaultDB = function(){
         db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
             "state": "DEFAULT"
         }, {
@@ -54,8 +60,18 @@ function Connection(props) {
         }).then(() => {
             console.log("Update success!");
         });
+    }
 
-        window.location.href = profile.room_url; // redirect to tapee's room
+    const processSendRequest = function(event){
+        event.preventDefault();
+        setDefaultDB();
+        window.location.href = personTwoProfile.room_url; // redirect to tapee's room
+    }
+
+    const processReceiveRequest = function(event){
+        event.preventDefault();
+        setDefaultDB();
+        window.location.href = personOneProfile.room_url; // redirect to tapper's room
     }
 
     if(loading){
@@ -66,22 +82,20 @@ function Connection(props) {
 
     if(props.state === "SEND_REQUEST"){
 
-        statusButton = <button onClick={updateDefaultState}>Join {profile.email} room</button>
+        statusButton = <button className={styles.tapbutton} onClick={processSendRequest}>Join {personTwoProfile.email} room</button>
 
     }
     else if(props.state === "RECEIVE_REQUEST"){
-        statusButton = <button onClick={updateDefaultState}> You have been tapped. Join room</button>
+        statusButton = <button className={styles.tapbutton} onClick={processReceiveRequest}> You have been tapped. Join room</button>
     }
     else{
-        statusButton =<button onClick={clickTap}>Tap</button>;
+        statusButton =<button className={styles.tapbutton} onClick={clickTap}>Tap</button>;
     }
 
     return (
-        <div>
-            <div>{profile.email}</div>
+        <div className={styles.container}>
+            <div>{personTwoProfile.email}</div>
             {statusButton}
-
-
         </div>
     )
 
