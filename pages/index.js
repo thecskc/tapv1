@@ -3,6 +3,7 @@ import {useState} from "react";
 import {useEffect} from "react";
 import SignIn from "../components/SignIn";
 import ListConnections from "../components/ListConnections";
+import Availability from "../components/Availability";
 
 const db = firebase.firestore();
 
@@ -27,8 +28,9 @@ function Home() {
 
     if (user) {
         return (
-            <div>
-                
+            <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignContent:"center"}}>
+
+                <Availability user={user}/>
                 <ListConnections user={user}/>
             </div>);
     }
