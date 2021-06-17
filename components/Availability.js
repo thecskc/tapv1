@@ -3,15 +3,21 @@ import firebase from "firebase";
 import {useState} from "react";
 import {useEffect} from "react";
 import styles from "./Availability.module.css";
+import "firebase/analytics";
+
 
 
 const db = firebase.firestore();
-
+let analytics;
 
 function Availability(props) {
 
     const [loading, setLoading] = useState(true)
     const [availabilityState, setAvailabilityState] = useState("")
+
+    useEffect(()=>{
+        analytics = firebase.analytics();
+    },[])
 
     useEffect(() => {
         db.collection("users").doc(props.user.uid).get().then((doc) => {
@@ -24,6 +30,8 @@ function Availability(props) {
         const value = e.target.value;
 
         const uid = props.user.uid;
+
+        analytics.logEvent("change_availability",{uid:uid,value:value});
 
         const batch = db.batch();
 

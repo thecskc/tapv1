@@ -11,6 +11,15 @@ function Home() {
 
     const [user, setUser] = useState("");
 
+    useEffect(()=>{
+        Notification.requestPermission().then(function (permission) {
+            // If the user accepts, let's create a notification
+            if (permission === "granted") {
+                console.log("permission granted");
+            }
+        });
+    },[])
+
 
 
     async function getUser() {

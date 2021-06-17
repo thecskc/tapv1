@@ -3,9 +3,11 @@ import firebase from "firebase";
 import {useEffect} from "react";
 import {useState} from "react";
 import styles from "./Connection.module.css"
+import "firebase/analytics";
 
 
 const db = firebase.firestore();
+let analytics;
 
 
 function Connection(props) {
@@ -14,6 +16,9 @@ function Connection(props) {
     const [personTwoProfile, setPersonTwoProfile] = useState({});
     const [personOneProfile,setPersonOneProfile] = useState({});
 
+    useEffect(()=>{
+        analytics = firebase.analytics();
+    },[])
 
 
     useEffect(() => {
@@ -30,7 +35,11 @@ function Connection(props) {
         })
     }, [])
 
+
     const clickTap = function(event){
+
+        analytics.logEvent("click_tap",{personOne:props.personOneUid,personTwo:props.personTwoUid});
+
 
         db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
             "state": "SEND_REQUEST"
@@ -66,13 +75,16 @@ function Connection(props) {
     const processSendRequest = function(event){
         event.preventDefault();
         setDefaultDB();
+        analytics.logEvent("join_room_send_request",{sent_by:props.personOneUid});
+
         window.location.href = personTwoProfile.room_url; // redirect to tapee's room
     }
 
     const processReceiveRequest = function(event){
         event.preventDefault();
         setDefaultDB();
-        window.location.href = personOneProfile.room_url; // redirect to tapper's room
+        analytics.logEvent("join_room_receive_request",{received_by:props.personOneUid});
+        window.location.href = personOneProfile.room_url; // redirect to my room
     }
 
     if(loading){
@@ -87,10 +99,9 @@ function Connection(props) {
 
     }
     else if(props.state === "RECEIVE_REQUEST"){
+        let notif = new Notification("You have been tapped!");
         statusButton = <button className={styles.tapbutton} onClick={processReceiveRequest}> You have been tapped. Join room</button>
-        if(window.toDesktop) {
-            const notification = new Notification("You have been tapped!");
-        }
+
 
     }
     else{
