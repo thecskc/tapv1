@@ -61,7 +61,7 @@ function SignIn(props) {
         <div className={styles.container}>
             <h2>Sign Up/Sign In</h2>
 
-            <input placeholder={"Enter your username"} className={styles.formitem} type={"text"} value={email}
+            <input placeholder={"Enter your username"} className={styles.formitem} type={"email"} value={email}
                    onChange={(e) => setEmail(e.target.value)}/>
 
             <input placeholder={"Enter your password"} className={styles.formitem} type={"password"} value={password}
