@@ -43,7 +43,7 @@ function ListConnections(props) {
 
     return (
         <div className={styles.container}>
-            <h3>Connections</h3>
+            <h2>Connections</h2>
             {
                 connections.map((val) => {
                     return (

@@ -1,7 +1,14 @@
 
 .container{
-    width:20vw;
+
+    display:flex;
+    flex-direction: row;
+    min-width:20vw;
     align-self: center;
+    justify-content: space-between;
+
+    padding:16px;
+    border:solid 0.5px black;
 }
 .selectcontainer{
 

@@ -2,6 +2,7 @@ import React from "react";
 import {useEffect} from "react";
 import {useState} from "react";
 import firebase from "firebase";
+import styles from "./SignIn.module.css"
 
 const db = firebase.firestore();
 
@@ -10,58 +11,64 @@ function SignIn(props) {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    async function signIn(email,password){
-        firebase.auth().signInWithEmailAndPassword(email, password).then((userCredential)=>{
+    async function signIn(email, password) {
+        firebase.auth().signInWithEmailAndPassword(email, password).then((userCredential) => {
             props.setUser(userCredential.user);
         })
     }
 
-    async function addToUsers(obj,userVal){
+    async function addToUsers(obj, userVal) {
         await db.collection("users").doc(obj.uid).set(obj);
         props.setUser(userVal);
     }
-    async function signUp(email,password){
+
+    async function signUp(email, password) {
         await firebase.auth().createUserWithEmailAndPassword(email, password).then(
-            (userCredential)=>{
+            (userCredential) => {
                 const user = userCredential.user;
                 const obj = {
-                    "uid":user.uid,
-                    "email":user.email
+                    "uid": user.uid,
+                    "email": user.email
                 }
-                addToUsers(obj,user)
+                addToUsers(obj, user)
 
             }
         )
     }
 
-    async function submitForm(e)
-    {
+    async function submitForm(e) {
         e.preventDefault();
-        console.log("trying to submit form", email,password);
-        db.collection("users").where("email","==",email).get().then((querySnapshot)=>{
+        console.log("trying to submit form", email, password);
+        db.collection("users").where("email", "==", email).get().then((querySnapshot) => {
             let dataArr = [];
-            querySnapshot.forEach((doc)=>{
+            querySnapshot.forEach((doc) => {
                 dataArr.push(doc);
             })
-            if(dataArr.length===0){
+            if (dataArr.length === 0) {
                 //user doesn't exist
-                signUp(email,password);
+                signUp(email, password);
 
-            }
-            else{
+            } else {
                 //user exists, sign in
-                signIn(email,password);
+                signIn(email, password);
             }
 
         })
 
     }
+
     return (
-        <form onSubmit={submitForm}>
-            <input type={"email"} value={email} onChange={(e) => setEmail(e.target.value)}/>
-            <input type={"password"} value={password} onChange={(e) => setPassword(e.target.value)}/>
-            <button>Submit</button>
-        </form>
+        <div className={styles.container}>
+            <h2>Sign Up/Sign In</h2>
+
+            <input placeholder={"Enter your username"} className={styles.formitem} type={"text"} value={email}
+                   onChange={(e) => setEmail(e.target.value)}/>
+
+            <input placeholder={"Enter your password"} className={styles.formitem} type={"password"} value={password}
+                   onChange={(e) => setPassword(e.target.value)}/>
+
+            <button className={styles.signbutton} onClick={submitForm}>Submit</button>
+        </div>
     )
 
 }

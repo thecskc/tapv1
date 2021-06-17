@@ -50,6 +50,7 @@ function Connection(props) {
         });
 
 
+
     }
 
     const setDefaultDB = function(){
@@ -87,6 +88,10 @@ function Connection(props) {
     }
     else if(props.state === "RECEIVE_REQUEST"){
         statusButton = <button className={styles.tapbutton} onClick={processReceiveRequest}> You have been tapped. Join room</button>
+        if(window.toDesktop) {
+            const notification = new Notification("You have been tapped!");
+        }
+
     }
     else{
         statusButton =<button className={styles.tapbutton} onClick={clickTap}>Tap</button>;
@@ -94,7 +99,7 @@ function Connection(props) {
 
     return (
         <div className={styles.container}>
-            <div>{personTwoProfile.email}</div>
+            <div style={{paddingLeft:"32px",paddingRight:"32px"}}>{personTwoProfile.email}</div>
             {statusButton}
         </div>
     )

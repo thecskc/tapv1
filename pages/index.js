@@ -28,7 +28,7 @@ function Home() {
 
     if (user) {
         return (
-            <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignContent:"center"}}>
+            <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignContent:"center",width:"400px",height:"500px"}}>
 
                 <Availability user={user}/>
                 <ListConnections user={user}/>
