@@ -18,6 +18,7 @@ function Connection(props) {
 
     useEffect(()=>{
         analytics = firebase.analytics();
+        analytics.setUserId(props.personOneUid);
     },[])
 
 

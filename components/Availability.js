@@ -17,6 +17,7 @@ function Availability(props) {
 
     useEffect(()=>{
         analytics = firebase.analytics();
+        analytics.setUserId(props.user.uid);
     },[])
 
     useEffect(() => {
