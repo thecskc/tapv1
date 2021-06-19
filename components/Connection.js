@@ -1,44 +1,105 @@
 import React from "react";
-import firebase from "firebase";
-import {useEffect} from "react";
 import {useState} from "react";
+import {useEffect} from "react";
+import firebase from "firebase";
 import styles from "./Connection.module.css"
-import "firebase/analytics";
-
 
 const db = firebase.firestore();
 let analytics;
 
-
 function Connection(props) {
 
-    const [loading,setLoading] = useState(true);
-    const [personTwoProfile, setPersonTwoProfile] = useState({});
-    const [personOneProfile,setPersonOneProfile] = useState({});
+
+    const [loading, setLoading] = useState(true);
+    const [personTwoProfile, setPersonTwoProflle] = useState({});
+    const [connectionState, setConnectionState] = useState("");
+    const [personOneProfile,setPersonOneProfile] = useState();
+    let connectionData;
 
     useEffect(()=>{
         analytics = firebase.analytics();
         analytics.setUserId(props.personOneUid);
     },[])
 
+    useEffect(() => {
+
+        let personTwoUnsub = db.collection("users").doc(props.personTwoUid).onSnapshot((doc) => {
+            setPersonTwoProflle(doc.data());
+        })
+
+        setLoading(false);
+
+        return function unsub() {
+            personTwoUnsub();
+        }
+    }, [])
+
+    useEffect(()=>{
+        db.collection("users").doc(props.personOneUid).get().then((doc)=>{
+            setPersonOneProfile(doc.data());
+        })
+    },[])
 
     useEffect(() => {
-        db.collection("users").doc(props.personTwoUid).get().then((result) => {
-            console.log(result.data());
-            setPersonTwoProfile(result.data());
 
-            db.collection("users").doc(props.personOneUid).get().then((result)=>{
-                setPersonOneProfile(result.data());
-                setLoading(false);
+        let connectionListener = db.collection("connections").doc(props.personOneUid + props.personTwoUid)
+            .onSnapshot((doc) => {
+                connectionData = doc.data();
+                setConnectionState(connectionData.state);
 
             })
 
-        })
-    }, [])
+        return function unsub(){
+            connectionListener();
+        }
+
+    },[])
+
+    //loading personTwoProfile
+    if (loading) {
+        return <div/>;
+    }
+
+    //loading personOneProfile
+    if(!personOneProfile){
+        return <div/>
+    }
+
+    //if person two unavailable
+    if (personTwoProfile.availability !== "available") {
+        return <div/>;
+    }
+
+    //if no connection state
+    if (!connectionState) {
+        console.log("No connection state right now");
+        return <div/>
+    }
 
 
-    const clickTap = function(event){
+    /*
+    To get to this portion of the code -
 
+    - PersonTwo's profile has been loaded
+    - Person Two is available to Tap
+    - Person One's profle has been loaded
+    - Connection state is one of three known states
+
+     */
+
+    function setDefaultStateDB(){
+        db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
+            "state": "DEFAULT"
+        }, {
+            merge: true
+        }).then(() => {
+            console.log("Update success!");
+        });
+    }
+
+    function clickTap(event){
+
+        event.preventDefault();
         analytics.logEvent("click_tap",{personOne:props.personOneUid,personTwo:props.personTwoUid});
 
 
@@ -60,59 +121,43 @@ function Connection(props) {
         });
 
 
-
     }
 
-    const setDefaultDB = function(){
-        db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
-            "state": "DEFAULT"
-        }, {
-            merge: true
-        }).then(() => {
-            console.log("Update success!");
-        });
-    }
-
-    const processSendRequest = function(event){
+    function handleSendRequest(event){
         event.preventDefault();
-        setDefaultDB();
         analytics.logEvent("join_room_send_request",{sent_by:props.personOneUid});
-
-        window.location.href = personTwoProfile.room_url; // redirect to tapee's room
+        setDefaultStateDB();
+        window.location.href = personTwoProfile.room_url;
     }
 
-    const processReceiveRequest = function(event){
+    function handleReceiveRequest(event){
         event.preventDefault();
-        setDefaultDB();
         analytics.logEvent("join_room_receive_request",{received_by:props.personOneUid});
-        window.location.href = personOneProfile.room_url; // redirect to my room
-    }
-
-    if(loading){
-        return <div/>
+        setDefaultStateDB();
+        window.location.href = personOneProfile.room_url;
     }
 
     let statusButton;
+    if (connectionState === "DEFAULT") {
 
-    if(props.state === "SEND_REQUEST"){
+        statusButton = <button className={styles.tapbutton} onClick={clickTap}>Tap</button>;
 
-        statusButton = <button className={styles.tapbutton} onClick={processSendRequest}>Join {personTwoProfile.email} room</button>
+    } else if (connectionState === "SEND_REQUEST") {
 
-    }
-    else if(props.state === "RECEIVE_REQUEST"){
+        statusButton = <button className={styles.tapbutton} onClick={handleSendRequest}>Join {personTwoProfile.email} room</button>
+
+    } else if (connectionState === "RECEIVE_REQUEST") {
+
         let notif = new Notification("You have been tapped!");
-        statusButton = <button className={styles.tapbutton} onClick={processReceiveRequest}> You have been tapped. Join room</button>
+        statusButton = <button className={styles.tapbutton} onClick={handleReceiveRequest}> You have been tapped. Join room</button>
 
-
-    }
-    else{
-        statusButton =<button className={styles.tapbutton} onClick={clickTap}>Tap</button>;
     }
 
     return (
         <div className={styles.container}>
-            <div style={{paddingLeft:"32px",paddingRight:"32px"}}>{personTwoProfile.email}</div>
+            <div style={{paddingLeft: "32px", paddingRight: "32px"}}>{personTwoProfile.email}</div>
             {statusButton}
+
         </div>
     )
 

@@ -38,21 +38,6 @@ function Availability(props) {
 
         db.collection("users").doc(uid).set({availability: value}, {merge: true});
 
-        db.collection("connections").where("personTwo", "==", uid).get().then((querySnapshot) => {
-
-            querySnapshot.forEach((doc) => {
-
-                const ref = db.collection("connections").doc(doc.id);
-                batch.update(ref, {"personTwoAvailability": value});
-
-            })
-
-            batch.commit().then(() => {
-                console.log("updates made");
-            })
-
-        })
-
         setAvailabilityState(value);
 
 

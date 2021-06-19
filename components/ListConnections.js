@@ -5,56 +5,48 @@ import firebase from "firebase";
 import Connection from "./Connection";
 import styles from "./ListConnections.module.css"
 
-
 const db = firebase.firestore();
-
 
 function ListConnections(props) {
 
-    const [connections, setConnections] = useState([])
-
+    const [connections, setConnections] = useState([]);
 
     useEffect(() => {
 
-        let fetchVal = db.collection("connections").where("personOne", "==", props.user.uid).onSnapshot(
-            (queryResult) => {
-                let arrRes = [];
-                queryResult.forEach((doc) => {
-                    console.log(doc.data());
-                    const personTwoAvailability = doc.data().personTwoAvailability;
-                    const personTwoUid = doc.data().personTwo;
-                    const state = doc.data().state;
+        let fetchVal;
+        fetchVal = db.collection("connections").where("personOne", "==", props.user.uid).
+        onSnapshot((queryResult) =>
+        {
+            let arrRes = [];
+            queryResult.forEach((doc) => {
+                console.log(doc.data());
+                const personTwoUid = doc.data().personTwo;
+                arrRes.push(<Connection personOneUid={props.user.uid} personTwoUid={personTwoUid} key={personTwoUid}/>);
 
-                    if (!personTwoAvailability || personTwoAvailability === "available") {
-                        arrRes.push(<Connection personOneUid={props.user.uid} personTwoUid={personTwoUid}
-                                                state={state} key={personTwoUid}/>);
-                    }
-                })
-                console.log(arrRes);
-                setConnections(arrRes);
-            });
+            })
+            console.log(arrRes);
+            setConnections(arrRes);
+        });
 
         return function unsub() {
             fetchVal();
         }
 
-
-    }, []);
+    }, [])
 
     return (
         <div className={styles.container}>
             <h2>Connections</h2>
             {
-                connections.map((val) => {
+                connections.map((conn) => {
                     return (
-                        <div>{val}</div>
+                        <div>{conn}</div>
 
                     );
                 })
             }
         </div>
     )
-
 
 }
 
