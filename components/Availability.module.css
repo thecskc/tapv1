@@ -6,7 +6,8 @@
     min-width:20vw;
     align-self: center;
     justify-content: space-between;
-
+    margin-top: 32px;
+    margin-bottom:32px;
     padding:16px;
     border:solid 0.5px black;
 }

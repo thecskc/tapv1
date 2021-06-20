@@ -21,7 +21,7 @@ function ListConnections(props) {
             queryResult.forEach((doc) => {
                 console.log(doc.data());
                 const personTwoUid = doc.data().personTwo;
-                arrRes.push(<Connection personOneUid={props.user.uid} personTwoUid={personTwoUid} key={personTwoUid}/>);
+                arrRes.push(<Connection personOneUid={props.user.uid} personTwoUid={personTwoUid} key={doc.id}/>);
 
             })
             console.log(arrRes);
