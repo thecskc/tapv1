@@ -32,19 +32,23 @@ function TeamRoom(props) {
         }
     },[])
 
-    if(!roomData.population || roomData.population === 0){
-        console.log("No population data");
-        statusMessage = "Tap";
+    if (roomData%3===1){
+        let notif = new Notification(`${roomData.room_name} is buzzing! Tap in!`)
     }
-    else{
-        statusMessage =`Join ${(roomData.population).toString()} others!`
-    }
+
+    // if(!roomData.population || roomData.population === 0){
+    //     console.log("No population data");
+    //     statusMessage = "Tap";
+    // }
+    // else{
+    //     statusMessage =`Join ${(roomData.population).toString()} others!`
+    // }
 
 
     return (
         <div className={styles.container}>
             <div>{roomData.room_name}</div>
-            <button className={styles.tapbutton} onClick={clickTap}>{statusMessage}</button>
+            <button className={styles.tapbutton} onClick={clickTap}>Tap</button>
 
         </div>
     )
