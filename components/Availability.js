@@ -49,7 +49,6 @@ function Availability(props) {
 
     return (
         <div className={styles.container}>
-            <h3>Set Availability</h3>
             <select className={styles.selectcontainer} value={availabilityState}
                     onChange={(e) => handleAvailabilityChange(e)}>
                 <option value="available">Available</option>

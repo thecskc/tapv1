@@ -4,6 +4,7 @@ import {useEffect} from "react";
 import SignIn from "../components/SignIn";
 import ListConnections from "../components/ListConnections";
 import Availability from "../components/Availability";
+import TeamRooms from "../components/TeamRooms";
 
 const db = firebase.firestore();
 
@@ -37,17 +38,17 @@ function Home() {
 
     if (user) {
         return (
-            <div style={{display:"flex",flexDirection:"column",justifyContent:"center",alignContent:"center",width:"400px",height:"500px"}}>
+            <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",alignContent:"center",width:"400px",height:"500px"}}>
 
                 <Availability user={user}/>
                 <ListConnections user={user}/>
+                <TeamRooms user={user}/>
             </div>);
     }
     else{
 
         return(<SignIn setUser={setUser}/>);
     }
-
 
 }
 
