@@ -18,6 +18,7 @@ function TeamRoom(props) {
     function clickTap(event){
         event.preventDefault();
         window.location.href = roomData.room_url;
+        let notif = new Notification(`If you're alone, stick around for a bit in case more people join :)`);
     }
 
     useEffect(()=>{
@@ -32,8 +33,9 @@ function TeamRoom(props) {
         }
     },[])
 
-    if (roomData%3===1){
-        let notif = new Notification(`${roomData.room_name} is buzzing! Tap in!`)
+    if (roomData.population%3===1){
+        console.log("here processing group room notification");
+        let notif = new Notification(`${roomData["room_name"]} is buzzing! Tap in!`)
     }
 
     // if(!roomData.population || roomData.population === 0){
@@ -47,7 +49,7 @@ function TeamRoom(props) {
 
     return (
         <div className={styles.container}>
-            <div>{roomData.room_name}</div>
+            <div>{roomData["room_name"]}</div>
             <button className={styles.tapbutton} onClick={clickTap}>Tap</button>
 
         </div>
