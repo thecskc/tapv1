@@ -34,3 +34,6 @@ yarn-error.log*
 .vercel
 
 .vscode/
+
+*.log
+functions/node_modules
