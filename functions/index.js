@@ -41,8 +41,22 @@ exports.updateTeamRoomsCount = functions.pubsub.schedule('every 1 minutes').onRu
     .then(res => res.json())
     .then((json) => {
         console.log(json);
+
+        if(Object.keys(json).length == 0) {
+            admin.firestore().collection("teamrooms").get().then(function(querySnapshot) {
+                querySnapshot.forEach(function(doc) {
+                    doc.ref.update({
+                        population: 0
+                    });
+                });
+            });
+
+        }
+
         for(const room in json) {
-            const participants = json[room].length;
+
+
+            const participants = json[room] ? json[room].length : 0;
             let roomURL = 'https://theworklab.daily.co/' + room;
 
             admin.firestore().collection("teamrooms").where("room_url", "==", roomURL).get().then(querySnapshot => {
