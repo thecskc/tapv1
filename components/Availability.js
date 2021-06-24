@@ -2,9 +2,7 @@ import React from "react";
 import firebase from "firebase";
 import {useState} from "react";
 import {useEffect} from "react";
-import styles from "./Availability.module.css";
 import "firebase/analytics";
-
 
 
 const db = firebase.firestore();
@@ -15,10 +13,10 @@ function Availability(props) {
     const [loading, setLoading] = useState(true)
     const [availabilityState, setAvailabilityState] = useState("")
 
-    useEffect(()=>{
+    useEffect(() => {
         analytics = firebase.analytics();
         analytics.setUserId(props.user.uid);
-    },[])
+    }, [])
 
     useEffect(() => {
         db.collection("users").doc(props.user.uid).get().then((doc) => {
@@ -32,7 +30,7 @@ function Availability(props) {
 
         const uid = props.user.uid;
 
-        analytics.logEvent("change_availability",{uid:uid,value:value});
+        analytics.logEvent("change_availability", {uid: uid, value: value});
 
         const batch = db.batch();
 
@@ -48,12 +46,20 @@ function Availability(props) {
     }
 
     return (
-        <div className={styles.container}>
-            <select className={styles.selectcontainer} value={availabilityState}
-                    onChange={(e) => handleAvailabilityChange(e)}>
-                <option value="available">Available</option>
-                <option value="donotdisturb">Do Not Disturb</option>
-            </select>
+        <div className={"section"}>
+            <div className={"field"}>
+
+                <div className={"control"}>
+                    <div className={"select is-info"}>
+                        <select value={availabilityState}
+                                onChange={(e) => handleAvailabilityChange(e)}>
+                            <option value="available">Available</option>
+                            <option value="donotdisturb">Do Not Disturb</option>
+                        </select>
+                    </div>
+                </div>
+
+            </div>
         </div>
     )
 

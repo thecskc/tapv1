@@ -2,7 +2,6 @@ import React from "react";
 import {useEffect} from "react";
 import {useState} from "react";
 import firebase from "firebase";
-import styles from "./SignIn.module.css"
 
 const db = firebase.firestore();
 
@@ -58,16 +57,41 @@ function SignIn(props) {
     }
 
     return (
-        <div className={styles.container}>
-            <h2>Sign Up/Sign In</h2>
+        <div className={"section is-large"} style={{border: "solid 1px"}}>
+            <div className={"container"}>
+                <h1 className="title">Sign Up/ Sign In</h1>
 
-            <input placeholder={"Enter your username"} className={styles.formitem} type={"email"} value={email}
-                   onChange={(e) => setEmail(e.target.value)}/>
+                <div className={"form"}>
 
-            <input placeholder={"Enter your password"} className={styles.formitem} type={"password"} value={password}
-                   onChange={(e) => setPassword(e.target.value)}/>
+                    <div className={"field"}>
+                        <label className={"label"}>Email</label>
+                        <div className={"control"}>
+                            <input className={"input"} placeholder={"Enter your email"} type={"email"} value={email}
+                                   onChange={(e) => setEmail(e.target.value)}/>
+                        </div>
+                    </div>
+                    <div className={"field"}>
+                        <label className={"label"}>Password</label>
+                        <div className={"control"}>
+                            <input className={"input"} placeholder={"Enter your password"} type={"password"}
+                                   value={password}
+                                   onChange={(e) => setPassword(e.target.value)}/>
+                        </div>
+                    </div>
 
-            <button className={styles.signbutton} onClick={submitForm}>Submit</button>
+                    <div className={"field"}>
+                        <div className={"control"}>
+
+                    <button className={"button is-primary"} onClick={submitForm}>Submit</button>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+            </div>
         </div>
     )
 

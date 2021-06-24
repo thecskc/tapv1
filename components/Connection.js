@@ -2,7 +2,6 @@ import React from "react";
 import {useState} from "react";
 import {useEffect} from "react";
 import firebase from "firebase";
-import styles from "./Connection.module.css"
 
 const db = firebase.firestore();
 let analytics;
@@ -13,13 +12,13 @@ function Connection(props) {
     const [loading, setLoading] = useState(true);
     const [personTwoProfile, setPersonTwoProflle] = useState({});
     const [connectionState, setConnectionState] = useState("");
-    const [personOneProfile,setPersonOneProfile] = useState();
+    const [personOneProfile, setPersonOneProfile] = useState();
     let connectionData;
 
-    useEffect(()=>{
+    useEffect(() => {
         analytics = firebase.analytics();
         analytics.setUserId(props.personOneUid);
-    },[])
+    }, [])
 
     useEffect(() => {
 
@@ -34,11 +33,11 @@ function Connection(props) {
         }
     }, [])
 
-    useEffect(()=>{
-        db.collection("users").doc(props.personOneUid).get().then((doc)=>{
+    useEffect(() => {
+        db.collection("users").doc(props.personOneUid).get().then((doc) => {
             setPersonOneProfile(doc.data());
         })
-    },[])
+    }, [])
 
     useEffect(() => {
 
@@ -49,11 +48,11 @@ function Connection(props) {
 
             })
 
-        return function unsub(){
+        return function unsub() {
             connectionListener();
         }
 
-    },[])
+    }, [])
 
     //loading personTwoProfile
     if (loading) {
@@ -61,7 +60,7 @@ function Connection(props) {
     }
 
     //loading personOneProfile
-    if(!personOneProfile){
+    if (!personOneProfile) {
         return <div/>
     }
 
@@ -87,7 +86,7 @@ function Connection(props) {
 
      */
 
-    function setDefaultStateDB(){
+    function setDefaultStateDB() {
         db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
             "state": "DEFAULT"
         }, {
@@ -97,10 +96,10 @@ function Connection(props) {
         });
     }
 
-    function clickTap(event){
+    function clickTap(event) {
 
         event.preventDefault();
-        analytics.logEvent("click_tap",{personOne:props.personOneUid,personTwo:props.personTwoUid});
+        analytics.logEvent("click_tap", {personOne: props.personOneUid, personTwo: props.personTwoUid});
 
 
         db.collection("connections").doc(props.personOneUid + props.personTwoUid).set({
@@ -123,16 +122,16 @@ function Connection(props) {
 
     }
 
-    function handleSendRequest(event){
+    function handleSendRequest(event) {
         event.preventDefault();
-        analytics.logEvent("join_room_send_request",{sent_by:props.personOneUid});
+        analytics.logEvent("join_room_send_request", {sent_by: props.personOneUid});
         setDefaultStateDB();
         window.location.href = personTwoProfile.room_url;
     }
 
-    function handleReceiveRequest(event){
+    function handleReceiveRequest(event) {
         event.preventDefault();
-        analytics.logEvent("join_room_receive_request",{received_by:props.personOneUid});
+        analytics.logEvent("join_room_receive_request", {received_by: props.personOneUid});
         setDefaultStateDB();
         window.location.href = personOneProfile.room_url;
     }
@@ -140,25 +139,32 @@ function Connection(props) {
     let statusButton;
     if (connectionState === "DEFAULT") {
 
-        statusButton = <button className={styles.tapbutton} onClick={clickTap}>Tap</button>;
+        statusButton = <button className={"button is-primary is-outlined"} onClick={clickTap}>Tap</button>;
 
     } else if (connectionState === "SEND_REQUEST") {
 
-        statusButton = <button className={styles.tapbutton} onClick={handleSendRequest}>Join {personTwoProfile.email} room</button>
+        statusButton = <button className={"button is-primary is-outlined"}
+                               onClick={handleSendRequest}>Join {personTwoProfile.email} room</button>
 
     } else if (connectionState === "RECEIVE_REQUEST") {
 
         let notif = new Notification("You have been tapped!");
-        statusButton = <button className={styles.tapbutton} onClick={handleReceiveRequest}> You have been tapped. Join room</button>
+        statusButton =
+            <button className={"button is-primary is-outlined"} onClick={handleReceiveRequest}> You have been tapped.
+                Join room</button>
 
     }
 
     return (
-        <div className={styles.container}>
-            <div style={{paddingLeft: "32px", paddingRight: "32px"}}>{personTwoProfile.email}</div>
+        <div className={"columns is-mobile notification"}>
+            <div className={"column is-four-fifths"}>
+                <h6 className={"title is-6"}>{personTwoProfile.email}</h6>
+            </div>
             {statusButton}
 
         </div>
+
+
     )
 
 

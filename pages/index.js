@@ -12,15 +12,14 @@ function Home() {
 
     const [user, setUser] = useState("");
 
-    useEffect(()=>{
+    useEffect(() => {
         Notification.requestPermission().then(function (permission) {
             // If the user accepts, let's create a notification
             if (permission === "granted") {
                 console.log("permission granted");
             }
         });
-    },[])
-
+    }, [])
 
 
     async function getUser() {
@@ -31,23 +30,26 @@ function Home() {
         });
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         getUser();
-    },[])
+    }, [])
 
 
     if (user) {
         return (
-            <div style={{display:"flex",flexDirection:"column",justifyContent:"space-between",alignContent:"center",width:"400px",height:"500px"}}>
+            <div className={"section"}>
 
-                <Availability user={user}/>
-                <ListConnections user={user}/>
-                <TeamRooms user={user}/>
+                <div className={"container is-mobile"}>
+
+                    <Availability user={user}/>
+                    <ListConnections user={user}/>
+                    <TeamRooms user={user}/>
+
+                </div>
             </div>);
-    }
-    else{
+    } else {
 
-        return(<SignIn setUser={setUser}/>);
+        return (<SignIn setUser={setUser}/>);
     }
 
 }

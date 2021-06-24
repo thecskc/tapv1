@@ -3,7 +3,6 @@ import {useState} from "react";
 import {useEffect} from "react";
 import firebase from "firebase";
 import Connection from "./Connection";
-import styles from "./ListConnections.module.css"
 
 const db = firebase.firestore();
 
@@ -14,9 +13,7 @@ function ListConnections(props) {
     useEffect(() => {
 
         let fetchVal;
-        fetchVal = db.collection("connections").where("personOne", "==", props.user.uid).
-        onSnapshot((queryResult) =>
-        {
+        fetchVal = db.collection("connections").where("personOne", "==", props.user.uid).onSnapshot((queryResult) => {
             let arrRes = [];
             queryResult.forEach((doc) => {
                 console.log(doc.data());
@@ -35,12 +32,13 @@ function ListConnections(props) {
     }, [])
 
     return (
-        <div className={styles.container}>
-            <h2>Connections</h2>
+        <div className={"section"}>
+
+            <h2 className={"title is-3"}>Connections</h2>
             {
                 connections.map((conn) => {
                     return (
-                        <div>{conn}</div>
+                        <div className={"block"}>{conn}</div>
 
                     );
                 })

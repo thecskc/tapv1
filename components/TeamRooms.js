@@ -3,7 +3,6 @@ import {useState} from "react";
 import {useEffect} from "react";
 import firebase from "firebase";
 import TeamRoom from "./TeamRoom";
-import styles from "./TeamRooms.module.css"
 
 
 const db = firebase.firestore();
@@ -46,8 +45,8 @@ function TeamRooms(props) {
     }
 
     return (
-        <div className={styles.container}>
-            <h2>Team Rooms</h2>
+        <div className={"section"}>
+            <h2 className={"title is-3"}>Team Rooms</h2>
             {
                 teamRooms.map((room)=>{return room})
             }

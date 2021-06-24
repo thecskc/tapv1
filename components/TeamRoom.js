@@ -2,7 +2,6 @@ import React from "react";
 import {useState} from "react";
 import {useEffect} from "react";
 import firebase from "firebase";
-import styles from "./TeamRoom.module.css"
 
 const db = firebase.firestore();
 let analytics;
@@ -11,29 +10,29 @@ function TeamRoom(props) {
 
 
     const roomID = props["room-info"].id;
-    const [roomData,setRoomData] = useState(props["room-info"].data());
+    const [roomData, setRoomData] = useState(props["room-info"].data());
 
     let statusMessage = "";
 
-    function clickTap(event){
+    function clickTap(event) {
         event.preventDefault();
         window.location.href = roomData.room_url;
         let notif = new Notification(`If you're alone, stick around for a bit in case more people join :)`);
     }
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        let roomListener = db.collection("teamrooms").doc(roomID).onSnapshot((doc)=>{
-            console.log("Snapshot",doc.data());
+        let roomListener = db.collection("teamrooms").doc(roomID).onSnapshot((doc) => {
+            console.log("Snapshot", doc.data());
             setRoomData(doc.data());
         })
 
-        return function unsub(){
+        return function unsub() {
             roomListener();
         }
-    },[])
+    }, [])
 
-    if (roomData.population%3===1){
+    if (roomData.population % 3 === 1) {
         console.log("here processing group room notification");
         let notif = new Notification(`${roomData["room_name"]} is buzzing! Tap in!`)
     }
@@ -48,9 +47,11 @@ function TeamRoom(props) {
 
 
     return (
-        <div className={styles.container}>
-            <div>{roomData["room_name"]}</div>
-            <button className={styles.tapbutton} onClick={clickTap}>Tap</button>
+        <div className={"columns is-mobile notification"}>
+            <div className={"column is-four-fifths"}>
+                <h6 className={"title is-6"}>{roomData["room_name"]}</h6>
+            </div>
+            <button className={"button is-primary is-outlined"} onClick={clickTap}>Tap</button>
 
         </div>
     )

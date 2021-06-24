@@ -5,6 +5,7 @@ import '../styles/globals.css'
 
 
 //prod
+
 const firebaseConfig = {
   apiKey: "AIzaSyC2zb82HvBH7LaqdiE1V241XXacTLIQjm0",
   authDomain: "tapv0-1360d.firebaseapp.com",
@@ -17,7 +18,10 @@ const firebaseConfig = {
 
 
 
+
+
 //dev
+
 /*
 const firebaseConfig = {
   apiKey: "AIzaSyCZGRUxQnX9SlILQ2oBul0Hz6A3LLIX_Do",
@@ -29,6 +33,8 @@ const firebaseConfig = {
   measurementId: "G-QYNL7XSHHC"
 }
 */
+
+
 
 
 // Initialize Firebase
