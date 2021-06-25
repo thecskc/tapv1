@@ -6,6 +6,7 @@ import '../styles/globals.css'
 
 //prod
 
+
 const firebaseConfig = {
   apiKey: "AIzaSyC2zb82HvBH7LaqdiE1V241XXacTLIQjm0",
   authDomain: "tapv0-1360d.firebaseapp.com",
@@ -32,7 +33,9 @@ const firebaseConfig = {
   appId: "1:954302078482:web:719ceda0c6d49cf4ce42cb",
   measurementId: "G-QYNL7XSHHC"
 }
-*/
+
+ */
+
 
 
 

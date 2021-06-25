@@ -23,7 +23,7 @@ function Availability(props) {
             setAvailabilityState(doc.data().availability)
             setLoading(false);
         })
-    })
+    },[])
 
     function handleAvailabilityChange(e) {
         const value = e.target.value;

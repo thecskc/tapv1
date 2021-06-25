@@ -42,7 +42,7 @@ exports.updateTeamRoomsCount = functions.pubsub.schedule('every 1 minutes').onRu
     .then((json) => {
         console.log(json);
 
-        if(Object.keys(json).length == 0) {
+        if(Object.keys(json).length === 0) {
             admin.firestore().collection("teamrooms").get().then(function(querySnapshot) {
                 querySnapshot.forEach(function(doc) {
                     doc.ref.update({
@@ -55,7 +55,7 @@ exports.updateTeamRoomsCount = functions.pubsub.schedule('every 1 minutes').onRu
 
         for(const room in json) {
 
-
+            console.log("json here",json);
             const participants = json[room] ? json[room].length : 0;
             let roomURL = 'https://theworklab.daily.co/' + room;
 

@@ -44,8 +44,9 @@ function Home() {
                     <div className={"section"}>
 
                         <Availability user={user}/>
-                        <ListConnections user={user}/>
                         <TeamRooms user={user}/>
+                        <ListConnections user={user}/>
+
 
                     </div>
 
