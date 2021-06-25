@@ -46,7 +46,7 @@ function Availability(props) {
     }
 
     return (
-        <div className={"section"}>
+
             <div className={"field"}>
 
                 <div className={"control"}>
@@ -60,7 +60,6 @@ function Availability(props) {
                 </div>
 
             </div>
-        </div>
     )
 
 }

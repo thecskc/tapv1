@@ -32,8 +32,8 @@ function ListConnections(props) {
     }, [])
 
     return (
-        <div className={"section"}>
 
+        <>
             <h2 className={"title is-3"}>Connections</h2>
             {
                 connections.map((conn) => {
@@ -43,7 +43,7 @@ function ListConnections(props) {
                     );
                 })
             }
-        </div>
+        </>
     )
 
 }

@@ -41,9 +41,13 @@ function Home() {
 
                 <div className={"container is-mobile"}>
 
-                    <Availability user={user}/>
-                    <ListConnections user={user}/>
-                    <TeamRooms user={user}/>
+                    <div className={"section"}>
+
+                        <Availability user={user}/>
+                        <ListConnections user={user}/>
+                        <TeamRooms user={user}/>
+
+                    </div>
 
                 </div>
             </div>);

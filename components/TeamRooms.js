@@ -40,17 +40,20 @@ function TeamRooms(props) {
 
     }, [])
 
-    if (teamRooms.length===0) {
+    if (teamRooms.length === 0) {
         return <div/>
     }
 
     return (
-        <div className={"section"}>
+        <>
+
             <h2 className={"title is-3"}>Team Rooms</h2>
             {
-                teamRooms.map((room)=>{return room})
+                teamRooms.map((room) => {
+                    return room
+                })
             }
-        </div>
+        </>
     )
 
 

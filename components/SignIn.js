@@ -57,7 +57,7 @@ function SignIn(props) {
     }
 
     return (
-        <div className={"section is-large"} style={{border: "solid 1px"}}>
+        <div className={"section is-large"}>
             <div className={"container"}>
                 <h1 className="title">Sign Up/ Sign In</h1>
 
