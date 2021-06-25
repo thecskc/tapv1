@@ -122,18 +122,32 @@ function Connection(props) {
 
     }
 
-    function handleSendRequest(event) {
+    function handleRequestAccepted(event) {
         event.preventDefault();
-        analytics.logEvent("join_room_send_request", {sent_by: props.personOneUid});
+        analytics.logEvent("join_room", {sent_by: props.personOneUid});
         setDefaultStateDB();
         window.location.href = personTwoProfile.room_url;
     }
 
-    function handleReceiveRequest(event) {
+    function handleReceiveRequestAcceptTap(event) {
         event.preventDefault();
-        analytics.logEvent("join_room_receive_request", {received_by: props.personOneUid});
+        analytics.logEvent("receive_request_accept_tap", {received_by: props.personOneUid});
         setDefaultStateDB();
+        db.collection("connections").doc(props.personTwoUid + props.personOneUid).set({
+            "state": "REQUEST_ACCEPTED"
+        }, {merge: true})
         window.location.href = personOneProfile.room_url;
+    }
+
+    function handleReceiveRequestRejectTap(event) {
+        event.preventDefault();
+        analytics.logEvent("receive_request_reject_tap", {received_by: props.personOneUid});
+        setDefaultStateDB();
+        db.collection("connections").doc(props.personTwoUid + props.personOneUid).set({
+            "state": "REQUEST_REJECTED"
+        }, {merge: true})
+        let notif = new Notification("Please mark yourself as unavailable!");
+
     }
 
     let statusButton;
@@ -143,17 +157,36 @@ function Connection(props) {
 
     } else if (connectionState === "SEND_REQUEST") {
 
-        statusButton = <button className={"button is-primary is-outlined"}
-                               onClick={handleSendRequest}>Join {personTwoProfile.email} room</button>
+        statusButton =
+            <button disabled className={"button is-primary is-outlined"}>Request Sent!</button>
 
     } else if (connectionState === "RECEIVE_REQUEST") {
 
         let notif = new Notification("You have been tapped!");
+        statusButton = <div className={"buttons are-small"}>
+            <button className={"button is-primary is-success"} onClick={handleReceiveRequestAcceptTap}> Accept Tap!
+            </button>
+            <button className={"button is-outlined"} onClick={handleReceiveRequestRejectTap}>
+                Can't Talk Right Now!
+            </button>
+        </div>
+
+    } else if (connectionState === "REQUEST_ACCEPTED") {
+        let notif = new Notification(`${personTwoProfile.email} accepted your Tap. Join Now!`);
         statusButton =
-            <button className={"button is-primary is-outlined"} onClick={handleReceiveRequest}> You have been tapped.
-                Join room</button>
+            <button className={"button is-success"} onClick={handleRequestAccepted}> Join!
+            </button>
+
+    } else if (connectionState === "REQUEST_REJECTED") {
+        let notif = new Notification(`${personTwoProfile.email} is unavailable right now`);
+        setTimeout(
+            function () {
+                setDefaultStateDB();
+            }, 2000
+        );
 
     }
+
 
     return (
         <div className={"columns is-mobile notification"}>

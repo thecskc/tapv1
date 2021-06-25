@@ -32,18 +32,21 @@ function TeamRoom(props) {
         }
     }, [])
 
-    if (roomData.population % 3 === 1) {
-        console.log("here processing group room notification");
-        let notif = new Notification(`${roomData["room_name"]} is buzzing! Tap in!`)
-    }
+    // if (roomData.population % 3 === 1) {
+    //     console.log("here processing group room notification");
+    //     let notif = new Notification(`${roomData["room_name"]} is buzzing! Tap in!`)
+    // }
 
-    // if(!roomData.population || roomData.population === 0){
-    //     console.log("No population data");
-    //     statusMessage = "Tap";
-    // }
-    // else{
-    //     statusMessage =`Join ${(roomData.population).toString()} others!`
-    // }
+    if(!roomData.population || roomData.population === 0){
+        console.log("No population data");
+        statusMessage = "Tap";
+    }
+    else{
+        if(roomData.population>=1){
+            let notif = new Notification(`${roomData["room_name"]} is buzzing! Tap in :)`)
+        }
+        statusMessage =`Join ${(roomData.population).toString()} others!`
+    }
 
 
     return (
@@ -51,7 +54,7 @@ function TeamRoom(props) {
             <div className={"column is-four-fifths"}>
                 <h6 className={"title is-6"}>{roomData["room_name"]}</h6>
             </div>
-            <button className={"button is-primary is-outlined"} onClick={clickTap}>Tap</button>
+            <button className={"button is-primary is-outlined"} onClick={clickTap}>{statusMessage}</button>
 
         </div>
     )
