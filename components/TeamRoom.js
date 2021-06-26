@@ -51,7 +51,7 @@ function TeamRoom(props) {
 
     return (
         <div className={"columns is-mobile notification"}>
-            <div className={"column is-four-fifths"}>
+            <div className={"column is-three-fifths"}>
                 <h6 className={"title is-6"}>{roomData["room_name"]}</h6>
             </div>
             <button className={"button is-primary is-outlined"} onClick={clickTap}>{statusMessage}</button>

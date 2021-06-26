@@ -190,7 +190,7 @@ function Connection(props) {
 
     return (
         <div className={"columns is-mobile notification"}>
-            <div className={"column is-four-fifths"}>
+            <div className={"column is-three-fifths"}>
                 <h6 className={"title is-6"}>{personTwoProfile.email}</h6>
             </div>
             {statusButton}
